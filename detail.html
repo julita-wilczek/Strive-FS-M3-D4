@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <title>Details</title>
+    <style>
+        .dropdown-item a{
+  color: #212529;
+  text-align: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/homepage.html">Black Books</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                <div class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bag"></i>
+                </div>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li id="cart-status"><a class="dropdown-item" href="#" >Your cart is empty</a></li>
+                    <li id="checkout" style="display: none" onclick="checkThisOut()" data-bs-toggle="modal" data-bs-target="#checkOut"><a class="dropdown-item">Continue to checkout <i class="bi bi-arrow-right-short"></i></a></li>
+                    <li id="empty" style="display: none" onclick="removeAll()"><div class="dropdown-item" data-bs-toggle="modal" data-bs-target="#removedAll">Clear the cart</div></li>
+                </ul>
+            </li>
+            
+              
+            </ul>
+            <form class="d-flex">
+              <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search">
+            </form>
+        
+            
+          </div>
+        </div>
+      </nav>
+
+
+      <div class="container">
+        
+        
+          <div class="row g-2 justify-content-center">
+
+          </div>
+      </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+  <script>
+      window.onload = () => {
+          generateBook()
+        
+        }
+let asin = new URLSearchParams(window.location.search)
+
+console.log(asin.get ("bookId"))
+        function generateBook() {
+            fetch("https://striveschool-api.herokuapp.com/books/"+asin.get("bookId"), { method: "GET" })
+                .then(response => response.json())
+                .then(book => {
+                   console.log(book)
+                 
+                   let coverImg = document.createElement("div")
+                    coverImg.className = "col-12 col-md-4"
+                    coverImg.innerHTML = `
+                    
+  <img src="${book.img}" class="card-img-top" alt="${book.title}-cover" title="${book.title}" style="width:100%; object-fit: fill">
+  `
+  let card = document.createElement("div")
+  card.className = "col-12 col-md-4"
+    card.innerHTML = 
+  `<div class="card mb-2">
+  <div class="card-body" style="width:100%">
+    <h5 class="card-title">${book.title}</h5>
+    <p class="card-text">Price: ${book.price} USD</p>
+    <p class="card-text">ASIN ${book.asin}</p>
+    <p class="card-text">Genre: ${book.category}</p>
+    </div>
+</div>`
+let row = document.querySelector(".row")
+row.appendChild(coverImg)
+row.appendChild(card)
+
+                })
+            .catch(err => console.error(err))
+        }
+  </script>
+  </body>
+</html>

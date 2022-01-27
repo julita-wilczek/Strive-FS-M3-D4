@@ -24,7 +24,7 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Black Books</a>
+          <a class="navbar-brand" href="/homepage.html">Black Books</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -100,7 +100,7 @@
     <script>
     window.onload = () => {
         loadBooks(renderBooks) 
-        document.querySelector("input").addEventListener("keyup", handleSearchQuery)
+        document.querySelector("input").addEventListener("keyup", search)
 
            
         }
@@ -115,7 +115,7 @@
                     card.className = "col col-12 col-sm-6 col-md-3 col-lg-2"
                     card.innerHTML = `
                     <div class="card mb-2">
-  <img src="${book.img}" class="card-img-top" alt="${book.title}-cover" style="height:250px; object-fit: cover">
+  <img src="${book.img}" class="card-img-top" alt="${book.title}-cover" title="${book.title}" style="height:250px; object-fit: cover">
   <div class="card-body">
     <h5 class="card-title">${book.title}</h5>
     <p class="card-text">Price: ${book.price} USD</p>
@@ -123,13 +123,15 @@
     <div class="btn btn-light" onclick= "deleteItem(event)" title="Not interested"><i class="bi bi-trash"></i></div>
     </div>
 </div>`
-
+card.onclick = function(){
+    window.location.assign("./detail.html?bookId="+book.asin)
+}
 let row = document.querySelector(".row")
 row.appendChild(card)
             })
         }
 
-        const handleSearchQuery = (event) => {
+        const search = (event) => {
             const searchQuery = event.target.value
 
             loadBooks(filterBooks, searchQuery)
@@ -139,6 +141,7 @@ row.appendChild(card)
             fetch("https://striveschool-api.herokuapp.com/books", { method: "GET" })
                 .then(response => response.json())
                 .then(booksArr => {
+                    console.log(booksArr)
                     callback(booksArr, searchQuery) //renderBooks(booksArr, undefined) //filterBooks(booksArr, "cats")
                 })
             .catch(err => console.error(err))
@@ -221,10 +224,6 @@ row.appendChild(card)
         let card = e.target.closest(".col")
         card.remove()
     
-    }
-
-    function search(){
-
     }
 
     function countCartItems(){
