@@ -11,7 +11,7 @@
     <title>Black Books</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-2">
         <div class="container-fluid">
           <a class="navbar-brand" href="#">Black Books</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,7 +32,7 @@
             </ul>
             <form class="d-flex">
               <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-secondary" type="submit">Search</button>
+              <button class="btn btn-outline-light" type="submit">Search</button>
             </form>
         
             
@@ -107,7 +107,7 @@ row.appendChild(card)
         let titleName = title.innerHTML
         let buttonIcon =  e.target.closest(".card-body").querySelector("i")
         buttonIcon.classList = "bi bi-bag-check"
-        shoppingCartItem.innerHTML = `<a class="dropdown-item" href="#">${titleName} <i class="bi bi-bag-dash" data-bs-toggle="modal" data-bs-target="#removedItem" title="Remove" onclick="remove(event)"></i></a>`
+        shoppingCartItem.innerHTML = `<a class="dropdown-item" href="#">${titleName}</a><i class="bi bi-bag-dash" data-bs-toggle="modal" data-bs-target="#removedItem" title="Remove" onclick="remove(event)"></i>`
         shoppingCart.appendChild(shoppingCartItem)
         let cartIcon = document.querySelector("#navbarDropdown i")
         cartIcon.classList = "bi bi-bag-fill"
@@ -131,7 +131,7 @@ row.appendChild(card)
             let cartStatus = document.querySelector("#cart-status")
             cartStatus.style.display = "inline-block"
         }
-        
+        changeBackIcon()
 
     }
 
@@ -153,6 +153,27 @@ row.appendChild(card)
         } else {
             cartIcon.innerHTML = ""
         }
+    }
+
+    function changeBackIcon(){
+        let cartItems = document.querySelectorAll(".dropdown-menu li a")
+        let bookTitles = document.querySelectorAll(".card-title")
+        let cartTitles = []
+        
+        cartItems.forEach(item => {
+            let title = item.innerHTML
+            cartTitles.push(title)
+        })
+        console.log(cartTitles)
+        bookTitles.forEach(book => {
+        if (cartTitles.includes(book.innerHTML)){
+
+        } else {   
+            let checkButton = book.closest(".card-body").querySelector("i")
+            checkButton.classList = "bi bi-bag-plus"
+        }
+        })
+
     }
     </script>
   </body>
