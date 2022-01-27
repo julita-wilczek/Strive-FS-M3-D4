@@ -44,8 +44,7 @@
               
             </ul>
             <form class="d-flex">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-light" type="submit">Search</button>
+              <input class="form-control me-2" type="text" placeholder="Search" aria-label="Search">
             </form>
         
             
@@ -100,16 +99,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script>
     window.onload = () => {
-            generateBooks()
+        loadBooks(renderBooks) 
+        document.querySelector("input").addEventListener("keyup", handleSearchQuery)
+
+           
         }
 
-        function generateBooks(){
-            fetch("https://striveschool-api.herokuapp.com/books") 
-            .then (response => response.json())
-            .then (database => {
-                console.log(database)
-                database.forEach(book => {
-                    let card = document.createElement("div")
+        
+        const renderBooks = (booksArr) => {
+            const row = document.querySelector(".row")
+
+            row.innerHTML = ""
+
+            booksArr.forEach((book, idx) => {let card = document.createElement("div")
                     card.className = "col col-12 col-sm-6 col-md-3 col-lg-2"
                     card.innerHTML = `
                     <div class="card mb-2">
@@ -124,11 +126,51 @@
 
 let row = document.querySelector(".row")
 row.appendChild(card)
-                })
-
             })
+        }
+
+        const handleSearchQuery = (event) => {
+            const searchQuery = event.target.value
+
+            loadBooks(filterBooks, searchQuery)
+        }
+
+        const loadBooks = (callback, searchQuery) => {
+            fetch("https://striveschool-api.herokuapp.com/books", { method: "GET" })
+                .then(response => response.json())
+                .then(booksArr => {
+                    callback(booksArr, searchQuery) //renderBooks(booksArr, undefined) //filterBooks(booksArr, "cats")
+                })
             .catch(err => console.error(err))
         }
+
+        const filterBooks = (booksArr, searchQuery) => {
+            if (searchQuery.length > 3) {
+            const filteredBooks = booksArr.filter(book => book.title.toLowerCase().includes(searchQuery.toLowerCase()))
+
+            renderBooks(filteredBooks)
+       } else {
+        loadBooks(renderBooks) 
+       }
+        }
+
+        /*
+        function search(query) {
+        if (query.length < 3) {
+          filteredBooks = booksArr;
+          renderBooks();
+          return;
+        }
+
+        filteredBooks = books.filter((book) =>
+          book.title.toLowerCase().includes(query.toLowerCase())
+        );
+
+        console.log(filteredBooks);
+        renderBooks(filteredBooks);
+      }
+        */
+
     function addToCart(e){
     
         let shoppingCart = document.querySelector(".dropdown-menu")
@@ -150,6 +192,7 @@ row.appendChild(card)
         let empty = document.querySelector("#empty")
         empty.style.display = "block"
         countCartItems()
+        
 
         
 
@@ -177,6 +220,7 @@ row.appendChild(card)
 
         let card = e.target.closest(".col")
         card.remove()
+    
     }
 
     function search(){
@@ -236,6 +280,8 @@ row.appendChild(card)
         deleteButtons.forEach(item => item.remove())
         checkOutModal.innerHTML += `<div class="btn btn-light" title="Continue to payment">Continue to payment</div>`
     }
+
+        
     </script>
   </body>
 </html>
