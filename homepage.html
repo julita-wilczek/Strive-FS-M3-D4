@@ -36,6 +36,8 @@
                 </div>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li id="cart-status"><a class="dropdown-item" href="#" >Your cart is empty</a></li>
+                    <li id="checkout" style="display: none"><a class="dropdown-item">Continue to checkout <i class="bi bi-arrow-right-short"></i></a></li>
+                    <li id="empty" style="display: none" onclick="removeAll()"><div class="dropdown-item">Clear the cart <i class="bi bi-arrow-right-short"></i></div></li>
                 </ul>
             </li>
             
@@ -124,6 +126,10 @@ row.appendChild(card)
         cartIcon.classList = "bi bi-bag-fill"
         let cartStatus = document.querySelector("#cart-status")
         cartStatus.style.display = "none"
+        let checkOut = document.querySelector("#checkout")
+        checkOut.style.display = "block"
+        let empty = document.querySelector("#empty")
+        empty.style.display = "block"
         countCartItems()
 
         
@@ -137,13 +143,15 @@ row.appendChild(card)
         let cartItems = document.querySelectorAll(".dropdown-menu li")
         let cartIcon = document.querySelector(".bi-bag-fill")
         countCartItems()
-        if (cartItems.length === 1) {
-            cartIcon.classList = "bi bi-bag"
-            let cartStatus = document.querySelector("#cart-status")
-            cartStatus.style.display = "inline-block"
-        }
         changeBackIcon()
+        
+    }
 
+    function removeAll() {
+        let cartItems = document.querySelectorAll(".book-title")
+        cartItems.forEach(item => item.closest("li").remove())
+        countCartItems()
+        changeBackIcon()
     }
 
     function deleteItem(e){
@@ -159,10 +167,20 @@ row.appendChild(card)
     function countCartItems(){
         let cartIcon = document.querySelector("#navbarDropdown i")
         let cartItems = document.querySelectorAll(".dropdown-menu li")
-        if (cartItems.length > 1) {
-        cartIcon.innerHTML = ` ${cartItems.length-1} `
+        if (cartItems.length > 3) {
+        cartIcon.innerHTML = ` ${cartItems.length-3} `
         } else {
             cartIcon.innerHTML = ""
+        }
+        if (cartItems.length === 3) {
+            cartIcon.classList = "bi bi-bag"
+            let cartStatus = document.querySelector("#cart-status")
+            cartStatus.style.display = "block"
+            let checkOut = document.querySelector("#checkout")
+            checkOut.style.display = "none"
+            let empty = document.querySelector("#empty")
+        empty.style.display = "none"
+
         }
     }
 
