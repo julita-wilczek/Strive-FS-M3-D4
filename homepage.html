@@ -24,6 +24,7 @@
                     <i class="bi bi-bag"></i>
                 </div>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li id="cart-status"><a class="dropdown-item" href="#" >Your cart is empty</a></li>
                 </ul>
             </li>
             
@@ -41,11 +42,20 @@
 
       <!--MAIN CONTENT WHERE THE BOOKS ARE GENERATED-->
       <div class="container">
-        <div class="modal fade" id="addedItem" tabindex="-1" aria-labelledby="addedItem" aria-hidden="true">
+        <div class="modal fade" id="addedItem" tabindex="-1" aria-labelledby="addedItemLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-body">
                   Book added to the cart
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="removedItem" tabindex="-1" aria-labelledby="removedItemLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-body">
+                  Book removed from the cart
                 </div>
               </div>
             </div>
@@ -87,7 +97,6 @@ row.appendChild(card)
             })
             .catch(err => console.error(err))
         }
-inner
     function addToCart(e){
     
         let shoppingCart = document.querySelector(".dropdown-menu")
@@ -97,21 +106,32 @@ inner
         let title = e.target.closest(".card-body").querySelector("h5")
         let titleName = title.innerHTML
         let buttonIcon =  e.target.closest(".card-body").querySelector("i")
-        buttonIcon.classList = "bi bi-bag-dash"
-        let button = e.target.closest(".card-body").lastChild
-        button.onclick = "removeFromCart(event)"
-        shoppingCartItem.innerHTML = `<li><a class="dropdown-item" href="#">${titleName} <i class="bi bi-bag-dash"></i></a></li>`
+        buttonIcon.classList = "bi bi-bag-check"
+        shoppingCartItem.innerHTML = `<a class="dropdown-item" href="#">${titleName} <i class="bi bi-bag-dash" data-bs-toggle="modal" data-bs-target="#removedItem" title="Remove" onclick="remove(event)"></i></a>`
         shoppingCart.appendChild(shoppingCartItem)
         let cartIcon = document.querySelector("#navbarDropdown i")
         cartIcon.classList = "bi bi-bag-fill"
+        let cartStatus = document.querySelector("#cart-status")
+        cartStatus.style.display = "none"
+        countCartItems()
 
- 
+        
+
+
+
     }
 
-    function removeFromCart(e){
-        let buttonIcon =  e.target.closest(".card-body").querySelector("i")
-        buttonIcon.classList = "bi bi-bag-dash"
-        button.onclick = addToCart(event)
+    function remove(e){
+        e.target.closest("li").remove()
+        let cartItems = document.querySelectorAll(".dropdown-menu li")
+        let cartIcon = document.querySelector(".bi-bag-fill")
+        countCartItems()
+        if (cartItems.length === 1) {
+            cartIcon.classList = "bi bi-bag"
+            let cartStatus = document.querySelector("#cart-status")
+            cartStatus.style.display = "inline-block"
+        }
+        
 
     }
 
@@ -119,6 +139,20 @@ inner
 
         let card = e.target.closest(".col")
         card.remove()
+    }
+
+    function search(){
+
+    }
+
+    function countCartItems(){
+        let cartIcon = document.querySelector("#navbarDropdown i")
+        let cartItems = document.querySelectorAll(".dropdown-menu li")
+        if (cartItems.length > 1) {
+        cartIcon.innerHTML = ` ${cartItems.length-1} `
+        } else {
+            cartIcon.innerHTML = ""
+        }
     }
     </script>
   </body>
