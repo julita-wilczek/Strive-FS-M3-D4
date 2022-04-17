@@ -2,9 +2,9 @@
 Repository for Strive School Full Stack Course work, Module 3 Day 4 (January 27, 2022)
 
 Strive Book Shop 📚
-This is a shopping cart experience for an online marketplace.
-Project is responsive and uses advanced javascript and Boostrap.
-API used: https://striveschool-api.herokuapp.com/books
+  This is a shopping cart experience for an online marketplace.
+  Project is responsive and uses advanced javascript and Boostrap.
+  API used: https://striveschool-api.herokuapp.com/books
 
 Features: 
 - a homepage with book displayed as cards
